@@ -1,0 +1,87 @@
+#!/bin/bash
+
+
+# Set variables to default values.
+concat=0
+manual=0
+help=0
+
+# Parse arguments
+if [[ "$@" == *"-c"* || "$@" == *"--concat"* ]]  # Check if the user wants to concatenate multiple files.
+then
+	concat=1
+fi
+
+if [[ "$@" == *"-m"* || "$@" == *"--manual"* ]] # Check if the user is manually entering text to paste.
+then
+	manual=1
+fi
+
+if [[ "$@" == *"-h"* || "$@" == *"--help"* ]] # Check if the user wants the help menu.
+then
+	help=1
+fi
+
+if [[ "$@" == *"-n"* || "$@" == *"--newline"* ]] # Check if the user wants newlines after each file in concat mode.
+then
+	newline=1
+fi
+
+# If the user wants the help menu, show it.
+if [ $help -eq 1 ]
+then
+	echo "Usage:  tb [options] [files]"
+	echo "-c, --concat:		Concatenate multiple files to one paste."
+	echo "-m, --manual:		Manually enter text."
+	echo "-n, --newline:		Add newline after each file in concat mode." # This looks out of line in a text editor but renders correctly in the shell.
+	echo "-h, --help:		Show this help menu."
+# Check if the user is passing in files to read.
+elif [[ "$1" != "" && "$@" != *"-m"* && "$@" != *"--manual"* ]]
+then
+	# If the user wants to concatenate multiple files, do so and upload the result.
+	if [ $concat -eq 1 ]
+	then
+		# If the user wants to, put a newline after each file.
+		if [ $newline -eq 1 ]
+		then
+			for file in $@
+			do
+				if [[ "$file" != "-c" && "$file" != "--concat" && "$file" != "-n" && "$file" != "--newline" ]]
+				then
+					if [ "$string" == "" ]
+					then
+						string="$(<$file)"
+					else
+						string="$string\n$(<$file)"
+					fi
+				fi
+			done
+		# Alternatively, don't put a newline after each file.
+		else
+			for file in $@
+            do
+				if [[ "$file" != "-c" && "$file" != "--concat" && "$file" != "-n" && "$file" != "--newline" ]]
+            	then
+                	string="$string$(<$file)"
+				fi
+			done
+		fi
+		# Upload the paste.
+		printf "$string" | nc termbin.com 9999
+	# Alternatively, upload each file individually.
+	else
+		for file in $@
+		do
+			nc termbin.com 9999 <$file
+		done
+	fi
+else
+	# If manual, buffer text before opening connection to avoid "Use netcat." timeout.
+	if [ $manual -eq 1 ]
+	then
+		string="$(cat)"
+		trap 'printf "$string" | nc termbin.com 9999' exit
+	else
+		nc termbin.com 9999
+	fi
+fi
