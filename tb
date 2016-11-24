@@ -33,7 +33,7 @@ then
 	echo "Usage:  tb [options] [files]"
 	echo "-c, --concat:		Concatenate multiple files to one paste."
 	echo "-m, --manual:		Manually enter text."
-	echo "-n, --newline:		Add newline after each file in concat mode." # This looks out of line in a text editor but renders correctly in the shell.
+	echo "-n, --newline:		Add newline after each file in concat mode."
 	echo "-h, --help:		Show this help menu."
 # Check if the user is passing in files to read.
 elif [[ "$1" != "" && "$@" != *"-m"* && "$@" != *"--manual"* ]]
