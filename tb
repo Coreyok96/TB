@@ -32,7 +32,7 @@ if [ $help -eq 1 ]
 then
 	echo "Usage:  tb [options] [files]"
 	echo "-c, --concat:		Concatenate multiple files to one paste."
-	echo "-m, --manual:		Manually enter text."
+	echo "-m, --manual:		Manually enter text. Hit Ctrl+D to end entry."
 	echo "-n, --newline:		Add newline after each file in concat mode."
 	echo "-h, --help:		Show this help menu."
 # Check if the user is passing in files to read.
