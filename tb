@@ -59,10 +59,10 @@ then
 		# Alternatively, don't put a newline after each file.
 		else
 			for file in $@
-            do
+			do
 				if [[ "$file" != "-c" && "$file" != "--concat" && "$file" != "-n" && "$file" != "--newline" ]]
-            	then
-                	string="$string$(<$file)"
+				then
+					string="$string$(<$file)"
 				fi
 			done
 		fi
