@@ -9,3 +9,4 @@ Type "tb -h" to view the help menu.
 
 1. Bash.
 2. Netcat.
+3. Cat.
