@@ -83,7 +83,7 @@ else
 	# If manual, buffer text before opening connection to avoid "Use netcat." timeout.
 	if [ $manual -eq 1 ]
 	then
-		string="$(cat)"
+		string="$(cat)" # Could use $(</dev/stdin), but that would require a unix-like OS.
 		trap 'printf "$string" | nc termbin.com 9999' exit
 	else
 		nc termbin.com 9999
