@@ -13,19 +13,16 @@ do
 	if [[ "$arg" == "-c" || "$arg" == "--concat" ]]  # Check if the user wants to concatenate multiple files.
 	then
 		concat=1
-	fi
 
-	if [[ "$arg" == "-m" || "$arg" == "--manual" ]] # Check if the user is manually entering text to paste.
+	elif [[ "$arg" == "-m" || "$arg" == "--manual" ]] # Check if the user is manually entering text to paste.
 	then
 		manual=1
-	fi
 
-	if [[ "$arg" == "-h" || "$arg" == "--help" ]] # Check if the user wants the help menu.
+	elif [[ "$arg" == "-h" || "$arg" == "--help" ]] # Check if the user wants the help menu.
 	then
 		help=1
-	fi
 
-	if [[ "$arg" == "-n" || "$arg" == "--newline" ]] # Check if the user wants newlines after each file in concat mode.
+	elif [[ "$arg" == "-n" || "$arg" == "--newline" ]] # Check if the user wants newlines after each file in concat mode.
 	then
 		newline=1
 	fi
