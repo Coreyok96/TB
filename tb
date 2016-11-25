@@ -8,25 +8,28 @@ help=0
 newline=0
 
 # Parse arguments
-if [[ "$@" == *"-c"* || "$@" == *"--concat"* ]]  # Check if the user wants to concatenate multiple files.
-then
-	concat=1
-fi
+for arg in "$@"
+do
+	if [[ "$arg" == "-c" || "$arg" == "--concat" ]]  # Check if the user wants to concatenate multiple files.
+	then
+		concat=1
+	fi
 
-if [[ "$@" == *"-m"* || "$@" == *"--manual"* ]] # Check if the user is manually entering text to paste.
-then
-	manual=1
-fi
+	if [[ "$arg" == "-m" || "$arg" == "--manual" ]] # Check if the user is manually entering text to paste.
+	then
+		manual=1
+	fi
 
-if [[ "$@" == *"-h"* || "$@" == *"--help"* ]] # Check if the user wants the help menu.
-then
-	help=1
-fi
+	if [[ "$arg" == "-h" || "$arg" == "--help" ]] # Check if the user wants the help menu.
+	then
+		help=1
+	fi
 
-if [[ "$@" == *"-n"* || "$@" == *"--newline"* ]] # Check if the user wants newlines after each file in concat mode.
-then
-	newline=1
-fi
+	if [[ "$arg" == "-n" || "$arg" == "--newline" ]] # Check if the user wants newlines after each file in concat mode.
+	then
+		newline=1
+	fi
+done
 
 # If the user wants the help menu, show it.
 if [ $help -eq 1 ]
