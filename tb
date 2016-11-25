@@ -5,6 +5,7 @@
 concat=0
 manual=0
 help=0
+newline=0
 
 # Parse arguments
 if [[ "$@" == *"-c"* || "$@" == *"--concat"* ]]  # Check if the user wants to concatenate multiple files.
