@@ -72,7 +72,7 @@ then
 	else
 		for file in $@
 		do
-			if [[ "$file" != "-n" && "$file" != "--newline" ]] # If user incorrectly u$
+			if [[ "$file" != "-n" && "$file" != "--newline" ]] # If user incorrectly uses newline mode while not using concat mode, ignore it.
 			then
 				nc termbin.com 9999 <$file
 			fi
