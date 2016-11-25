@@ -72,7 +72,10 @@ then
 	else
 		for file in $@
 		do
-			nc termbin.com 9999 <$file
+			if [[ "$file" != "-n" && "$file" != "--newline" ]] # If user incorrectly u$
+			then
+				nc termbin.com 9999 <$file
+			fi
 		done
 	fi
 else
