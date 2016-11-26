@@ -6,6 +6,9 @@ concat=0
 manual=0
 help=0
 newline=0
+generate=0
+server="termbin.com 9999"
+a=0 # For "[ip] [port]" extraction loop.
 
 # Parse arguments
 for arg in "$@"
@@ -29,6 +32,10 @@ do
 			elif [ "$char" == "n" ] # Check if the user wants newlines after each file in concat mode.
 			then
 				newline=1
+
+			elif [ "$char" == "g" ] # Check if the user wants to generate a config file.
+			then
+				generate=1
 			fi
 		done < <(printf ${arg:1:$(( ${#arg}-1 ))}) # Printf the value of arg after the first character (dash) to avoid printf trying to parse it as an argument.
 	elif [ "$arg" == "--concat" ]  # Check if the user wants to concatenate multiple files.
@@ -46,7 +53,44 @@ do
 	elif [ "$arg" == "--newline" ] # Check if the user wants newlines after each file in concat mode.
 	then
 		newline=1
+
+	elif [ "$arg" == "--generate" ] # Check if the user wants to generate a config file.
+	then
+		generate=1
 	fi
+done
+
+# If config file exists, load it.
+if [ -e ~/.tb/config ]
+then
+	. ~/.tb/config
+fi
+
+# If the user wants to generate a config file, do so.
+if [ $generate -eq 1 ]
+then
+	mkdir -p ~/.tb
+	echo "Enter fiche server in the format: [host] [port]"
+	echo "(If left blank, will default to termbin.com)"
+	read server
+	if [ "$server" == "" ]
+	then
+		echo 'server="termbin.com 9999"' > ~/.tb/config
+	else
+		echo "server=\"$server\"" > ~/.tb/config
+	fi
+fi
+
+# Extract server ip/hostname and port from single variable for netcat.
+for i in $server
+do
+	if [ $a -eq 0 ]
+	then
+		host="$i"
+	else
+		port="$i"
+	fi
+	a=$(( a+1 ))
 done
 
 # If the user wants the help menu, show it.
@@ -54,6 +98,7 @@ if [ $help -eq 1 ]
 then
 	echo "Usage:  tb [options] [files]"
 	echo "-c, --concat:		Concatenate multiple files to one paste."
+	echo "-g, --generate:		Generate config file."
 	echo "-m, --manual:		Manually enter text. Hit Ctrl+D to end entry."
 	echo "-n, --newline:		Add newline after each file in concat mode."
 	echo "-h, --help:		Show this help menu."
@@ -89,14 +134,14 @@ then
 			done
 		fi
 		# Upload the paste.
-		printf "$string" | nc termbin.com 9999
+		printf "$string" | nc "$host" "$port"
 	# Alternatively, upload each file individually.
 	else
 		for file in $@
 		do
 			if [[ "$file" != "-n" && "$file" != "--newline" ]] # If user incorrectly uses newline mode while not using concat mode, ignore it.
 			then
-				nc termbin.com 9999 <$file
+				nc "$host" "$port" <$file
 			fi
 		done
 	fi
@@ -105,8 +150,8 @@ else
 	if [ $manual -eq 1 ]
 	then
 		string="$(cat)" # Could use $(</dev/stdin), but that would require a unix-like OS.
-		trap 'printf "$string" | nc termbin.com 9999' exit
+		printf "$string" | nc "$host" "$port"
 	else
-		nc termbin.com 9999
+		nc "$host" "$port"
 	fi
 fi
