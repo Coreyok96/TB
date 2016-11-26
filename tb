@@ -30,7 +30,7 @@ do
 			then
 				newline=1
 			fi
-		done < <(printf $arg)
+		done < <(printf ${arg:1:$(( ${#arg}-1 ))}) # Printf the value of arg after the first character (dash) to avoid printf trying to parse it as an argument.
 	elif [ "$arg" == "--concat" ]  # Check if the user wants to concatenate multiple files.
 	then
 		concat=1
