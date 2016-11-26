@@ -58,7 +58,7 @@ do
 	then
 		generate=1
 	else
-		files="$files$arg" # Add files to list.
+		files="$files$arg " # Add files to list.
 	fi
 done
 
