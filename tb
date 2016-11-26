@@ -10,19 +10,40 @@ newline=0
 # Parse arguments
 for arg in "$@"
 do
-	if [[ "$arg" == "-c" || "$arg" == "--concat" ]]  # Check if the user wants to concatenate multiple files.
+	if [[ "${arg:0:1}" == "-" && "${arg:0:2}" != "--" ]] # If the string starts with "-", but not "--"
+	then
+		while read -n1 char
+		do
+			if [ "$char" == "c" ]  # Check if the user wants to concatenate multiple files.
+			then
+				concat=1
+
+			elif [ "$char" == "m" ] # Check if the user is manually entering text to paste.
+			then
+				manual=1
+
+			elif [ "$char" == "h" ] # Check if the user wants the help menu.
+			then
+				help=1
+
+			elif [ "$char" == "n" ] # Check if the user wants newlines after each file in concat mode.
+			then
+				newline=1
+			fi
+		done < <(printf $arg)
+	elif [ "$arg" == "--concat" ]  # Check if the user wants to concatenate multiple files.
 	then
 		concat=1
 
-	elif [[ "$arg" == "-m" || "$arg" == "--manual" ]] # Check if the user is manually entering text to paste.
+	elif [ "$arg" == "--manual" ] # Check if the user is manually entering text to paste.
 	then
 		manual=1
 
-	elif [[ "$arg" == "-h" || "$arg" == "--help" ]] # Check if the user wants the help menu.
+	elif [ "$arg" == "--help" ] # Check if the user wants the help menu.
 	then
 		help=1
 
-	elif [[ "$arg" == "-n" || "$arg" == "--newline" ]] # Check if the user wants newlines after each file in concat mode.
+	elif [ "$arg" == "--newline" ] # Check if the user wants newlines after each file in concat mode.
 	then
 		newline=1
 	fi
@@ -47,8 +68,7 @@ then
 		then
 			for file in $@
 			do
-				if [[ "$file" != "-c" && "$file" != "--concat" && "$file" != "-n" && "$file" != "--newline" ]]
-				then
+				if [[ "$file" != "-c" && "$file" != "--concat" && "$file" != "-n" && "$file" != "--newline" && "$file" != "-cn" && "$file" != "-nc" && "$file" != "-c-n" && "$file" != "-n-c" ]]				then
 					if [ "$string" == "" ]
 					then
 						string="$(<$file)"
