@@ -68,7 +68,8 @@ then
 		then
 			for file in $@
 			do
-				if [[ "$file" != "-c" && "$file" != "--concat" && "$file" != "-n" && "$file" != "--newline" && "$file" != "-cn" && "$file" != "-nc" && "$file" != "-c-n" && "$file" != "-n-c" ]]				then
+				if [[ "$file" != "-c" && "$file" != "--concat" && "$file" != "-n" && "$file" != "--newline" && "$file" != "-cn" && "$file" != "-nc" && "$file" != "-c-n" && "$file" != "-n-c" ]]
+				then
 					if [ "$string" == "" ]
 					then
 						string="$(<$file)"
